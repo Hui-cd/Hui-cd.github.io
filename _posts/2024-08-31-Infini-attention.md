@@ -6,7 +6,17 @@ categories:
     - machine-learning
 author: Hui
 ---
-
+<head>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+            inlineMath: [['$','$']]
+            }
+        });
+    </script>
+</head>
 
 Memory serves 内存服务是智能的基石，因为它可以根据定制的环境进行高效的计算,但对于Transformer 和基于Transformer的大模型来说，因为注意力机制的本质，它们都存在受限的上下文相关记忆。该注意力机制在内存和计算方面都是$O(n^2)$。对于使用标准的Transformer的大模型来说，扩大上下文记忆的序列，通常带来的经济成本很高
 
