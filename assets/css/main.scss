@@ -2,6 +2,38 @@
 # Only the main Sass file needs front matter (the dashes are enough)
 search: false
 ---
+.scrollable-math-formula {
+    overflow-x: hidden; /* 初始状态下隐藏水平滚动条 */
+    background: inherit; /* 背景颜色与当前网站一致 */
+    padding: 12px 16px; /* 合适的内边距 */
+    white-space: nowrap; /* 防止公式内换行 */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* 轻微透明的边框 */
+    border-radius: 8px; /* 圆角边框 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 苹果风格字体 */
+    font-size: 1em; /* 合适的字体大小 */
+    color: inherit; /* 文本颜色继承自网站样式 */
+    transition: border-color 0.2s ease-in-out, overflow-x 0.2s ease-in-out; /* 平滑过渡效果 */
+}
+
+.scrollable-math-formula:hover {
+    overflow-x: auto; /* 悬停时显示水平滚动条 */
+    border-color: rgba(0, 0, 0, 0.2); /* 鼠标悬停时边框颜色变深 */
+}
+
+/* 隐藏滚动条的样式，仅在滚动时显示 */
+.scrollable-math-formula::-webkit-scrollbar {
+    height: 6px;
+    background-color: transparent; /* 初始状态下滚动条背景透明 */
+}
+
+.scrollable-math-formula::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3); /* 滚动条的滑块颜色 */
+    border-radius: 10px; /* 圆角滑块 */
+}
+
+
+
+
 
 @charset "utf-8";
 
