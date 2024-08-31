@@ -3,7 +3,7 @@ single: post
 title:  "Infini-Attention"
 date:   2024-08-31 22:50:22 +1000
 categories: 
-    - machine-learning
+    - deep-learning
 author: Hui
 ---
 <head>
