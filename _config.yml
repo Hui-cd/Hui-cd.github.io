@@ -26,7 +26,7 @@ url                      : https://hui-cd.github.io # the base hostname & protoc
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : Hui-cd/Hui-cd.github.io # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
-logo                     : "image/logo.jpg"
+logo                     : "image/atom-2.svg"
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
 breadcrumbs              : # true, false (default)
 words_per_minute         : 200
