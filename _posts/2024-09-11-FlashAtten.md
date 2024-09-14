@@ -13,7 +13,7 @@ $$\text{Complexity} = O(n^2 \cdot d)$$
 $$\text{Memory} = O(n^2)$$
 
 目前的大模型达到的处输入上下文大小:
-| Model                    | Maximum Context Length |
+| Model                    | Maximum Context Length  |
 |--------------------------|-------------------------|
 | GPT-4                    | 32k tokens              |
 | MosaicML’s MPT           | 65k tokens              |
