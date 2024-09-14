@@ -12,13 +12,6 @@ author: Hui
 $$\text{Complexity} = O(n^2 \cdot d)$$
 $$\text{Memory} = O(n^2)$$
 
-目前的大模型达到的处输入上下文大小:
-| Model                    | Maximum Context Length  |
-|--------------------------|-------------------------|
-| GPT-4                    | 32k tokens              |
-| MosaicML’s MPT           | 65k tokens              |
-| Anthropic’s Claude       | 100k tokens             |
-
 ### 性能对比
 尽管 FlashAttention 的计算速度是标准注意力机制（Standard Attention）的 2 到 4 倍，但其性能在 GPU 上的发挥并未完全达到理想状态：
 - **前向推理能力**：在 GPU 设备上，FlashAttention 的前向推理能力仅能达到理论 FLOPs（每秒浮点运算次数）的 30% 到 50%。
@@ -303,7 +296,8 @@ online softmax 技术的优化计算过程如下：
 4. 计算 $D = \text{rowsum}(dO \circ O) \in \mathbb{R}^{d}$（逐元素相乘），将 $D$ 写入 HBM 并分割为 $T_r$ 个块 $D_1, \dots, D_{T_r}$，每个块大小为 $B_r$
 5. 对于每个 $j$，从 1 到 $T_c$，执行以下操作：
    1. 从 HBM 中将 $K_j, V_j$ 加载到片上 SRAM
-   2. 在 SRAM 上初始化 $dK_j = (0)_{B_c \times d}$，$dV_j = (0)_{B_c \times d}$
+   2. 在 SRAM 上初始化
+ $$dK_j = (0)_{B_c \times d}$，$dV_j = (0)_{B_c\times d}$$
    3. 对于每个 $i$，从 1 到 $T_r$，执行以下操作：
       1. 从 HBM 中将 $Q_i, O_i, dO_i, dQ_i, L_i, D_i$ 加载到片上 SRAM
       2. 在片上计算 $S_i^{(j)} = Q_i K_j^T \in \mathbb{R}^{B_r \times B_c}$
