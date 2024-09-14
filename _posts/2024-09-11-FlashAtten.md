@@ -19,11 +19,24 @@ $$\text{Memory} = O(n^2)$$
 | MosaicML’s MPT           | 65k tokens              |
 | Anthropic’s Claude       | 100k tokens             |
 
-大多数大规模训练使用的还是standard attention，Flash Attention 的速度虽然是standard attention的2到4倍，但它的前向推理能力仅到达GPU设备理论的百分之30到百分之50 FLOPs/s (是计算机每秒能够执行的浮点运算的数量)，反向传播仅达到百分之25-35 在A100的GPU上面。相比之下，优化后的GEMM可以达到理论最大设备吞吐量的80-90%。
+### 性能对比
+尽管 FlashAttention 的计算速度是标准注意力机制（Standard Attention）的 2 到 4 倍，但其性能在 GPU 上的发挥并未完全达到理想状态：
+- **前向推理能力**：在 GPU 设备上，FlashAttention 的前向推理能力仅能达到理论 FLOPs（每秒浮点运算次数）的 30% 到 50%。
+- **反向传播**：在 A100 GPU 上，FlashAttention 的反向传播性能仅达到 25% 到 35%。
 
-导致这样的原因是因为 FlashAttention 在 GPU 上不同线程块和扭曲之间的工作分区仍然不理想，导致低占用率或不必要的共享内存读/写。
+相比之下，优化后的矩阵乘法（GEMM）可以接近设备的理论最大吞吐量，达到 80% 到 90%。
 
-目前现代的GPU采用 FP16和 BF16种常用的浮点数表示格式
+### 原因分析
+FlashAttention 在 GPU 上的性能局限性主要由以下因素导致：
+- **工作分区不理想**：在不同的线程块和 warp（扭曲）之间的工作分配不够理想，导致 GPU 占用率低。
+- **共享内存的读写**：过多不必要的共享内存读/写操作，降低了整体性能。
+
+### GPU 浮点数格式
+现代 GPU 通常采用以下浮点数表示格式以优化性能和精度：
+- **FP16**：半精度浮点数，常用于需要较高计算速度但可以容忍精度较低的应用场景。
+- **BF16**：Brain Floating Point（脑浮点数），介于 FP16 和 FP32 之间的精度，特别适用于深度学习等领域。
+
+这些浮点格式的选择对于达到 GPU 的最大计算效率至关重要。
 
 
 ### Standard Attention Implementation
@@ -32,7 +45,7 @@ $$\text{Memory} = O(n^2)$$
 其中$N$是输入序列的长度，$d$是head dimension
 
 #### 注意力机制计算
-**计算得分矩阵 \(S\)**：
+**计算得分矩阵 $S$**：
 
 $$S = QK^T \in \mathbb{R}^{N \times N}$$
 
@@ -41,7 +54,7 @@ $$S = QK^T \in \mathbb{R}^{N \times N}$$
 $$P = \text{softmax}(S) \in \mathbb{R}^{N \times N},$$
 其中$softmax$是逐行应用到矩阵$S$中
 
-**计算输出矩阵 \(O\)**：
+**计算输出矩阵 $O$**：
 
 $$O = PV \in \mathbb{R}^{N \times d}$$
 
@@ -63,7 +76,7 @@ $$ dO = d(PV) = P \, dV \in \mathbb{R}^{N \times d} $$
 
 $$ dV = P^T dO \in \mathbb{R}^{N \times d} $$
 
-**$P$ 的梯度 $dP**
+**$P$ 的梯度 $dP$**
 
 对于 $P$ 的梯度计算如下：
 
@@ -178,7 +191,7 @@ online softmax 计算步骤如下：
 
 
 FlashAttention 如何使用online softmax 以减少内存读写如下图所示
-<img src="/image/FlashAtten.png" alt="Flash-Attention Diagram" style="zoom:130%;" />
+<img src="/image/FlashAtten.png" alt="Flash-Attention Diagram" style="zoom:180%;" />
 
 
 ### FlashAttention反向传播
@@ -255,7 +268,8 @@ online softmax 技术的优化计算过程如下：
 2. 将输出 $O \in \mathbb{R}^{N \times d}$ 分割为 $T_r$ 个块 $O_1, \dots, O_{T_r}$，每个块大小为 $B_r \times d$，并将 logsumexp $L$ 分割为 $T_r$ 个块 $L_1, \dots, L_{T_r}$，每个块大小为 $B_r$
 3. 对于每个 $i$，从 1 到 $T_r$，执行以下操作：
    1. 从 HBM 中将 $Q_i$ 加载到片上 SRAM
-   2. 在片上初始化 $O_i^{(0)} = (0)_{B_r \times d} \in \mathbb{R}^{B_r \times d}$，$\ell_i^{(0)} = (0)_{B_r} \in \mathbb{R}^{B_r}$，$m_i^{(0)} = (-\infty)_{B_r} \in \mathbb{R}^{B_r}$
+   2. 在片上初始化 
+ $$O_i^{(0)} = (0)_{B_r \times d} \in \mathbb{R}^{B_r \times d}$，$\ell_i^{(0)} = (0)_{B_r} \in \mathbb{R}^{B_r}$，$m_i^{(0)} = (-\infty)_{B_r} \in \mathbb{R}^{B_r}$$
    3. 对于每个 $j$，从 1 到 $T_c$，执行以下操作：
       1. 从 HBM 中将 $K_j$ 和 $V_j$ 加载到片上 SRAM
       2. 在片上计算 $S_i^{(j)} = Q_i K_j^T \in \mathbb{R}^{B_r \times B_c}$
@@ -285,7 +299,7 @@ online softmax 技术的优化计算过程如下：
 **步骤**：
 1. 将 $Q$ 分割为 $T_r = \lceil \frac{N}{B_r} \rceil$ 个块 $Q_1, \dots, Q_{T_r}$，每个块大小为 $B_r \times d$。将 $K, V$ 分割为 $T_c = \lceil \frac{N}{B_c} \rceil$ 个块 $K_1, \dots, K_{T_c}$ 和 $V_1, \dots, V_{T_c}$，每个块大小为 $B_c \times d$
 2. 将 $O$ 分割为 $T_r$ 个块 $O_1, \dots, O_{T_r}$，将 $dO$ 分割为 $T_r$ 个块 $dO_1, \dots, dO_{T_r}$，每个块大小为 $B_r \times d$，并将 logsumexp $L$ 分割为 $T_r$ 个块 $L_1, \dots, L_{T_r}$
-3. 初始化 $dQ = (0)_{N \times d}$ 并将其分割为 $T_r$ 个块 $dQ_1, \dots, dQ_{T_r}$。将 $dK, dV \in \mathbb{R}^{N \times d}$ 分割为 $T_c$ 个块 $dK_1, \dots, dK_{T_c}$ 和 $dV_1, \dots, dV_{T_c}$，每个块大小为 $B_c \times d$
+3. 初始化$$dQ = (0)_{N \times d}$$ 并将其分割为 $T_r$ 个块 $dQ_1, \dots, dQ_{T_r}$。将 $dK, dV \in \mathbb{R}^{N \times d}$ 分割为 $T_c$ 个块 $dK_1, \dots, dK_{T_c}$ 和 $dV_1, \dots, dV_{T_c}$，每个块大小为 $B_c \times d$
 4. 计算 $D = \text{rowsum}(dO \circ O) \in \mathbb{R}^{d}$（逐元素相乘），将 $D$ 写入 HBM 并分割为 $T_r$ 个块 $D_1, \dots, D_{T_r}$，每个块大小为 $B_r$
 5. 对于每个 $j$，从 1 到 $T_c$，执行以下操作：
    1. 从 HBM 中将 $K_j, V_j$ 加载到片上 SRAM
@@ -344,6 +358,7 @@ FlashAttention 初始版本主要通过批次大小和头数实现并行化：
 
 
 <img src="/image/wrap.png" alt="Flash-Attention Diagram" style="zoom:130%;" />
+
 ### 反向传播（Backward Pass）
 
 对于反向传播，FlashAttention-2 也避免了 “split-K” 方案，减少了 warp 之间的同步。然而，由于反向传播涉及更多复杂的依赖关系（比如 $Q, K, V, O, dO, dQ, dK, dV$ 等），还是需要一定的同步操作。不过，避免 “split-K” 依然有效地减少了共享内存的读写操作，并加速了反向传播。
