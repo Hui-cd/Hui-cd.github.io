@@ -40,6 +40,7 @@ FlashAttention 在 GPU 上的性能局限性主要由以下因素导致：
 其中$N$是输入序列的长度，$d$是head dimension
 
 #### 注意力机制计算
+
 **计算得分矩阵 $S$**：
 
 $$S = QK^T \in \mathbb{R}^{N \times N}$$
@@ -54,15 +55,20 @@ $$P = \text{softmax}(S) \in \mathbb{R}^{N \times N},$$
 $$O = PV \in \mathbb{R}^{N \times d}$$
 
 #### backward pass的注意力处理
+
 令$dO \in \mathbb{R}^{N \times d}$ 为 $O$ 关于某个损失函数的梯度。
 
+
 应用链式法则计算反向传播:
+
 **输出矩阵$O$ 的梯度$dO$**：
 
 $$dO \in \mathbb{R}^{N \times d}$$
+
 这是我们的输出是已知的，可以根据这个计算其他的导数
 
 **值矩阵 $V$ 的梯度 $dV$**
+
 对于值矩阵 $V$ 的梯度计算如下：
 
 $$ dO = d(PV) = P \, dV \in \mathbb{R}^{N \times d} $$
@@ -82,6 +88,7 @@ $$ dO = d(PV) = dP \cdot V + P \cdot dV $$
 $$ dP = dO \cdot V^T $$
 
 **$S$ 的梯度 $dS$**
+
 对于 $S$（softmax 函数的输出）的梯度计算如下：
 
 $$ dS = \text{softmax\_grad}(P, dP) $$
@@ -91,6 +98,7 @@ $$ dS = \text{softmax\_grad}(P, dP) $$
 $$ dS = \text{dsoftmax}(dP) \in \mathbb{R}^{N \times N} $$
 
 **$Q$ 的梯度 $dQ$**
+
 给定 $S = QK^T$，$Q$ 的梯度为：
 
 $$ dS = d(QK^T) = dQ \cdot K^T + Q \cdot dK^T $$
@@ -100,6 +108,7 @@ $$ dS = d(QK^T) = dQ \cdot K^T + Q \cdot dK^T $$
 $$ dQ = dS \cdot K $$
 
 **$K$ 的梯度 $dK$**
+
 最后，$K$ 的梯度计算为：
 
 $$ dK = Q^T \cdot dS $$
