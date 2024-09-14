@@ -91,7 +91,7 @@ $$ dP = dO \cdot V^T $$
 
 对于 $S$（softmax 函数的输出）的梯度计算如下：
 
-$$ dS = \text{softmax\_grad}(P, dP) $$
+$$ dS = \text{softmax_grad}(P, dP) $$
 
 更明确地表示为：
 
