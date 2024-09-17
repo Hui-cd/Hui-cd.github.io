@@ -7,7 +7,11 @@ categories:
 author: Hui
 ---
 
-## 正态分布的KL散度推导
+## KL 散度
+
+KL散度（Kullback-Leibler divergence），也称为相对熵，是一种度量两个概率分布相对于彼此差异的统计工具
+
+### 正态分布的KL散度推导
 
 假设我们有两个正态分布，$P$ 和 $Q$，其中：
 - $P \sim \mathcal{N}(\mu_P, \sigma_P^2)$
