@@ -23,9 +23,11 @@ $$
 #### 正态分布的概率密度函数
 
 正态分布的概率密度函数为：
+
 $$
 p(x) = \frac{1}{\sqrt{2\pi \sigma_P^2}} e^{-\frac{(x-\mu_P)^2}{2\sigma_P^2}}
 $$
+
 $$
 q(x) = \frac{1}{\sqrt{2\pi \sigma_Q^2}} e^{-\frac{(x-\mu_Q)^2}{2\sigma_Q^2}}
 $$
