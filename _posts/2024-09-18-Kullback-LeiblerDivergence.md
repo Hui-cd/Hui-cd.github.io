@@ -43,9 +43,11 @@ $$
 #### 展开平方项
 
 接下来，我们展开两个平方项：
+
 $$
 \frac{(x-\mu_Q)^2}{2\sigma_Q^2} - \frac{(x-\mu_P)^2}{2\sigma_P^2} = \frac{x^2 - 2x\mu_Q + \mu_Q^2}{2\sigma_Q^2} - \frac{x^2 - 2x\mu_P + \mu_P^2}{2\sigma_P^2}
 $$
+
 $$
 = \left(\frac{1}{2\sigma_Q^2} - \frac{1}{2\sigma_P^2}\right)x^2 + \left(\frac{2\mu_Q}{2\sigma_Q^2} - \frac{2\mu_P}{2\sigma_P^2}\right)x + \left(\frac{\mu_Q^2}{2\sigma_Q^2} - \frac{\mu_P^2}{2\sigma_P^2}\right)
 $$
