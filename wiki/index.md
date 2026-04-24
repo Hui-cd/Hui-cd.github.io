@@ -26,6 +26,7 @@ _Last updated: 2026-04-25 — 8 pages_
 | [[interview-notes-comprehensive]] | LLM 面试笔记综合索引 | 2026-04-25 |
 | [[projects-overview]] | 辉少核心项目索引 | 2026-04-25 |
 | [[external-blogs]] | 权威 AI 研究者博客索引 | 2026-04-25 |
+| [[llm-questions-2025]] | 2025 年大模型面试题汇总 | 2026-04-25 |
 
 ## Sources processed
 | Page | Summary | Updated |

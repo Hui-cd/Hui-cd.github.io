@@ -3,14 +3,37 @@ site_url: https://hui-cd.github.io/wiki
 
 nav:
   - 首页: index.md
-  - 机器学习基础: topics/machine-learning.md
-  - 深度学习: topics/deep-learning.md
-  - 大模型训练: topics/llm-training.md
-  - 生成模型: topics/generative-models.md
-  - 推理优化: topics/inference-optimization.md
-  - 模型系列: topics/model-series.md
-  - 辉少项目: topics/projects.md
-  - 外部资源: topics/external-resources.md
+  - 机器学习基础:
+    - machine-learning-basics.md
+    - kl-divergence.md
+  - 深度学习:
+    - transformer.md
+    - flash-attention.md
+    - infini-attention.md
+  - 大模型训练:
+    - llm-rl-algorithms.md
+    - sft-vs-rlhf.md
+    - deepspeed.md
+    - quantization.md
+  - 生成模型:
+    - diffusion-model.md
+    - flow-matching.md
+    - vae.md
+  - 推理优化:
+    - pagedattention.md
+  - 模型系列:
+    - deepseek.md
+    - qwen-series.md
+  - 辉少项目:
+    - gait.md
+    - grpo-global.md
+    - mcp-agent-project.md
+    - projects-overview.md
+  - 面试题:
+    - llm-questions-2025.md
+    - interview-notes-comprehensive.md
+  - 外部资源:
+    - external-blogs.md
   - 日志: log.md
 
 theme:
