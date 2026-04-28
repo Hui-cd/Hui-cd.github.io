@@ -5,11 +5,23 @@ nav:
   - 首页: index.md
   - 机器学习基础:
     - machine-learning-basics.md
+    - logistic-regression.md
     - kl-divergence.md
+    - gaussian-distribution.md
+    - spherical-gaussian.md
+    - gaussian-posterior.md
+    - poisson-distribution.md
+    - probability-basics.md
+    - em-algorithm.md
+    - orthogonal-basis.md
   - 深度学习:
     - transformer.md
     - flash-attention.md
     - infini-attention.md
+    - activation-functions.md
+    - unet.md
+    - gemm.md
+    - floating-point.md
   - 大模型训练:
     - llm-rl-algorithms.md
     - sft-vs-rlhf.md
@@ -19,6 +31,7 @@ nav:
     - diffusion-model.md
     - flow-matching.md
     - vae.md
+    - resshift.md
   - 推理优化:
     - pagedattention.md
   - 模型系列:
