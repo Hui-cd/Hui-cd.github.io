@@ -66,3 +66,24 @@
 - Pages updated: index.md
 - Total wiki pages: 23
 ---
+
+## [2026-04-29] ingest | Missing Blog Posts & Notes
+- Source: /home/hui/wiki/sources/ (remaining uncovered files)
+- Pages created: 13
+  - logistic-regression.md (Sigmoid 概率分类，交叉熵损失推导)
+  - gaussian-distribution.md (最大熵/CLT/微分方程三角度推导)
+  - spherical-gaussian.md (协方差 σ²I 的简化多元高斯)
+  - gaussian-posterior.md (高斯先验+线性高斯似然的后验解析解)
+  - poisson-distribution.md (二项分布极限，稀有事件计数)
+  - probability-basics.md (先验/后验/贝叶斯定理)
+  - em-algorithm.md (E步+M步迭代，隐变量模型参数估计)
+  - orthogonal-basis.md (Gram-Schmidt 正交化)
+  - activation-functions.md (Sigmoid 到 GELU 的演进)
+  - unet.md (编码器-解码器与下采样替代方案)
+  - floating-point.md (FP16/BF16 低精度浮点格式)
+  - gemm.md (通用矩阵乘法与深度学习计算优化)
+  - resshift.md (基于残差移位的扩散超分辨率)
+- Pages updated: index.md (32 pages total)
+- Topics updated: machine-learning.md, deep-learning.md, generative-models.md, inference-optimization.md
+- Skipped: 2024-12-29-personal.md (personal essay, non-technical)
+---
