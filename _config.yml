@@ -145,6 +145,9 @@ include:
   - .htaccess
   - _pages
 exclude:
+  - AGENTS.md
+  - README.md
+  - zhihu-articles
   - "*.sublime-project"
   - "*.sublime-workspace"
   - vendor
@@ -320,4 +323,3 @@ defaults:
     values:
       layout: single
       author_profile: true
-
